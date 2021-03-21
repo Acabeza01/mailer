@@ -1,8 +1,10 @@
 package com.acabeza.mailer;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.Properties;
+import java.util.Random;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -29,6 +31,14 @@ public class MailerApplication {
 		SpringApplication.run(MailerApplication.class, args);
 	}
 
+/*
+ * HEROKU start vanaf CLI:
+ * 
+ * heroku run java -jar target/mailer-0.0.1-SNAPSHOT.jar
+ * heroku run java -Dserver.port=$PORT $JAVA_OPTS -jar target/mailer-0.0.1-SNAPSHOT.jar
+ * 
+ */
+	
 	@Component
 	public class ApplicationRunnerBean implements ApplicationRunner {
 		@Override
@@ -58,14 +68,24 @@ public class MailerApplication {
 		   });
 		   Message msg = new MimeMessage(session);
 		   msg.setFrom(new InternetAddress(mailSender, false));
-
 		   msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(mailSender));
-		   msg.setSubject("Tutorials point email");
-		   msg.setContent("Tutorials point content", "text/html");
+		   
+		   byte[] array = new byte[7]; // length is bounded by 7
+		   new Random().nextBytes(array);
+		   String generatedSubject = new String(array, Charset.forName("UTF-8"));
+
+		   new Random().nextBytes(array);
+		   String generatedContent = new String(array, Charset.forName("UTF-8"));
+
+		   new Random().nextBytes(array);
+		   String generatedBodyPart = new String(array, Charset.forName("UTF-8"));
+		   
+		   msg.setSubject(generatedSubject);
+		   msg.setContent(generatedContent, "text/html");
 		   msg.setSentDate(new Date());
 
 		   MimeBodyPart messageBodyPart = new MimeBodyPart();
-		   messageBodyPart.setContent("Dit is de tekst van het <b>mailbericht<b>", "text/html");
+		   messageBodyPart.setContent(generatedBodyPart, "text/html");
 
 		   Multipart multipart = new MimeMultipart();
 		   multipart.addBodyPart(messageBodyPart);
