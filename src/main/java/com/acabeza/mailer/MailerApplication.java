@@ -50,8 +50,8 @@ public class MailerApplication {
 //		public void run(ApplicationArguments args) throws Exception {
 //
 //			System.out.println("Mailer started");
-////			sendmail();
-////			System.out.println("Ended");
+//
+//			System.out.println("Ended");
 //
 //		}
 //	}

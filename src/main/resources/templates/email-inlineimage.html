@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title th:remove="all">Template for HTML email with inline image</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+  <body>
+    <div>
+    	<h1>NEW RELEASES</h1>
+        <div th:each="album: ${albums}"> 
+             <h3 th:text="${album.artist + ' - ' + album.name}">..</h3> 
+             <h4 th:text="${album.release_date + ' - ' + album.album_type}">..</h4> 
+             <h5 th:text="${album.genres}">..</h5>              
+             <img th:src="${album.image}" />
+             <div th:each="track: ${album.tracks}">
+            	<a th:text="${track.name}" th:href="${track.prev_url}" th:if="${track.prev_url != null}">..</a>
+            	<a th:text="${track.name}" th:if="${track.prev_url == null}">..</a>            
+             </div>
+        	 <br/>
+        </div>
+    </div>
+  </body>
+</html>
