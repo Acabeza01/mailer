@@ -11,6 +11,7 @@ import com.wrapper.spotify.requests.data.artists.GetArtistRequest;
 import com.wrapper.spotify.requests.data.browse.GetListOfNewReleasesRequest;
 import com.acabeza.mailer.model.MyAlbum;
 import com.acabeza.mailer.model.Track;
+import com.neovisionaries.i18n.CountryCode;
 
 import org.apache.hc.core5.http.ParseException;
 import org.springframework.stereotype.Service;
@@ -31,21 +32,31 @@ public class SpotifyService {
   private static final SpotifyApi spotifyApi = new SpotifyApi.Builder().setAccessToken(accessToken)
     .build();
   
-  private static int offset = 0;
-  private static int meer = 0;
-  
-  private static GetListOfNewReleasesRequest getListOfNewReleasesRequest = spotifyApi.getListOfNewReleases()
-//          .country(CountryCode.NL)
-          .limit(50)
-          .offset(offset)
-    .build();
+ 
+//  private static GetListOfNewReleasesRequest getListOfNewReleasesRequest = spotifyApi.getListOfNewReleases()
+////          .country(CountryCode.NL)
+//          .limit(50)
+//          .offset(offset)
+//    .build();
 
  
-  public static List<MyAlbum> getListOfNewReleases_Sync() {
+  public static List<MyAlbum> getListOfNewReleases_Sync(CountryCode country) {
     try {
         List<MyAlbum> albums = new ArrayList<MyAlbum>();
+        
+        int meer = 0;
+        int i = 0;
+        int offset = 0;
     	do { 
-		
+
+    		  offset = 50 * meer;
+//    		  System.out.println("offset: " + offset);
+    		  GetListOfNewReleasesRequest getListOfNewReleasesRequest = spotifyApi.getListOfNewReleases()
+    		          .country(country)
+    		          .limit(50)
+    		          .offset(offset)
+    		    .build();    		
+    		
 		      Paging<AlbumSimplified> albumSimplifiedPaging = getListOfNewReleasesRequest.execute();
 		
 		      LocalDate date = LocalDate.now();
@@ -55,7 +66,7 @@ public class SpotifyService {
 		    	  
 		          LocalDate ld = LocalDate.parse(e.getReleaseDate(), DATEFORMATTER); 
 		          Period period = Period.between(ld, date);
-//		    	  System.out.println("Release "+ ld + " -- period: " + period.getDays()  + " dagen geleden");
+//		    	  System.out.println("** " + ++i + " " + e.getName() + " Release "+ ld + " -- period: " + period.getDays()  + " dagen geleden");
 		    	  
 		    	  if (period.getDays() < 8) {
 		    		  
@@ -69,7 +80,7 @@ public class SpotifyService {
 		    		  
 		    		  MyAlbum album = new MyAlbum(e.getId(), e.getName(), e.getArtists()[0].getName(), e.getAlbumType(), e.getReleaseDate(), e.getImages()[1].getUrl(), genres);
 		    		  
-//			    	  System.out.println("***: " + e.getArtists()[0].getName() + " - " + e.getName() + " - " + e.getId() + " - " + e.getImages()[1].getUrl() );
+//			    	  System.out.println("***: " + ++i + " " + e.getArtists()[0].getName() + " - " + e.getName() + " - " + e.getId() + " - " + e.getImages()[1].getUrl() );
 			    	  
 			    	  GetAlbumsTracksRequest getAlbumsTracksRequest = spotifyApi.getAlbumsTracks(e.getId()).build();
 			    	  Paging<TrackSimplified> trackSimplifiedPaging = getAlbumsTracksRequest.execute();
@@ -122,7 +133,10 @@ public class SpotifyService {
 //		      albumSimplifiedPaging = getListOfNewReleasesRequest.execute();
 //		      meer = albumSimplifiedPaging.getTotal();
 //		      System.out.println("new total: "+  meer);
-    } while (meer > 0);  // meer even op 0 laten om maar 1x te draaien (RATE LIMIT)
+		      
+		      meer += 1;
+		      
+    } while (meer < 2);  // meer even op 0 laten om maar 1x te draaien (RATE LIMIT)
       return albums;
   
     } catch (IOException | SpotifyWebApiException | ParseException e) {
