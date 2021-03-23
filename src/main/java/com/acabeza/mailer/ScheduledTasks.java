@@ -24,7 +24,7 @@ public class ScheduledTasks {
 
 	private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
 
-	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM HH:mm:ss");
 
 //	@Scheduled(fixedDelay = 500000)
 //	@Scheduled(cron = "3 * * * * *")	//elke minuut op :03 seconden -- seconden minuten uren dagen maanden jaren
@@ -33,17 +33,17 @@ public class ScheduledTasks {
 		log.info("The time is now {}", dateFormat.format(new Date()));
 		
 		List<MyAlbum> albums = SpotifyService.getListOfNewReleases_Sync();		
-		log.info("Albums read..", dateFormat.format(new Date()));
+		log.info("Albums read.. {}", dateFormat.format(new Date()));
 		
         Mail mail = new Mail();
-        mail.setFrom("acabeza02@hotmail.com");//replace with your desired email
-        mail.setMailTo("acabeza02@gmail.com");//replace with your desired email
-        mail.setSubject("New Releases");
+        mail.setFrom(System.getenv("mailsender"));//replace with your desired email
+        mail.setMailTo(System.getenv("mailreceiver"));//replace with your desired email
+        mail.setSubject("New Releases " + dateFormat.format(new Date()));
         Map<String, Object> model = new HashMap<String, Object>();
         model.put("albums", albums);
         mail.setProps(model);
         emailService.sendEmail(mail);	
-		log.info("Mail sent..", dateFormat.format(new Date()));	
+		log.info("Mail sent.. {}", dateFormat.format(new Date()));	
 	}
 	
 }
