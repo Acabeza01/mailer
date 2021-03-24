@@ -29,33 +29,30 @@ import org.springframework.stereotype.Component;
 @EnableScheduling
 public class MailerApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MailerApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(MailerApplication.class, args);
+    }
 
-/*
- * HEROKU start vanaf CLI:
- * 
- * heroku run java -jar target/mailer-0.0.1-SNAPSHOT.jar
- * heroku run java -Dserver.port=$PORT $JAVA_OPTS -jar target/mailer-0.0.1-SNAPSHOT.jar
- * 
- * zie Procfile voor Scheduler job met van Heroku CLI:
- * heroku ps:scale scheduler=1 
- * 
- */
-	
-//	@Component
-//	public class ApplicationRunnerBean implements ApplicationRunner {
-//		@Override
-//		public void run(ApplicationArguments args) throws Exception {
-//
-//			System.out.println("Mailer started");
-//
-//			System.out.println("Ended");
-//
-//		}
-//	}
-	
+    /*
+     * HEROKU start vanaf CLI:
+     * 
+     * heroku run java -jar target/mailer-0.0.1-SNAPSHOT.jar heroku run java -Dserver.port=$PORT $JAVA_OPTS -jar
+     * target/mailer-0.0.1-SNAPSHOT.jar
+     * 
+     * zie Procfile voor Scheduler job met van Heroku CLI: heroku ps:scale scheduler=1
+     * 
+     */
 
-	
+    // @Component
+    // public class ApplicationRunnerBean implements ApplicationRunner {
+    // @Override
+    // public void run(ApplicationArguments args) throws Exception {
+    //
+    // System.out.println("Mailer started");
+    //
+    // System.out.println("Ended");
+    //
+    // }
+    // }
+
 }

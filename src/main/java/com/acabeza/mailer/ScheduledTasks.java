@@ -17,45 +17,54 @@ import com.acabeza.mailer.service.EmailSenderService;
 import com.acabeza.mailer.service.SpotifyService;
 import com.neovisionaries.i18n.CountryCode;
 
-
 @Component
 public class ScheduledTasks {
-	
-	@Autowired
-	  private EmailSenderService emailService;
 
-	private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
+    @Autowired
+    private EmailSenderService emailService;
 
-	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM HH:mm:ss");
+    private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
 
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM HH:mm:ss");
 
-//	@Scheduled(fixedDelay = 500000)
-//	@Scheduled(cron = "3 * * * * *")	//elke minuut op :03 seconden -- seconden minuten uren dagen maanden jaren
-	@Scheduled(cron = "0 0 * * * *")	//elke dag om 7:00:00 uur -- seconden minuten uren dagen maanden jaren
-	public void reportCurrentTime() throws Exception {
-		
-		log.info("The time is now {}", dateFormat.format(new Date()));
-		
-//		CountryCode[] country = { CountryCode.US, CountryCode.UK, CountryCode.NL};
-		CountryCode[] country = { CountryCode.NL};
-		
-		for ( CountryCode c : country) {
-		
-			log.info("Country {}", c.getName());
-			List<MyAlbum> albums = SpotifyService.getListOfNewReleases_Sync(c);		
-			log.info("Albums read.. {}", dateFormat.format(new Date()));
-			
-	        Mail mail = new Mail();
-	        mail.setFrom(System.getenv("mailsender"));//replace with your desired email
-	        mail.setMailTo(System.getenv("mailreceiver"));//replace with your desired email
-	        mail.setSubject("New Releases " + c.getName() + " "+ dateFormat.format(new Date()));
-	        Map<String, Object> model = new HashMap<String, Object>();
-	        model.put("albums", albums);
-	        mail.setProps(model);
-	        Thread.sleep(1000);
-	        emailService.sendEmail(mail);	
-			log.info("Mail sent.. {}", dateFormat.format(new Date()));	
-		}
-	}
-	
+    // @Scheduled(fixedDelay = 500000)
+    // @Scheduled(cron = "3 * * * * *") //elke minuut op :03 seconden -- seconden minuten uren dagen maanden jaren
+    // @Scheduled(cron = "0 0 7 * * *") //elke dag om 7:00:00 uur -- seconden minuten uren dagen maanden jaren
+    // @Scheduled(cron = "* 31 * * * WED") //elke WOENSdag om :31:00 uur -- seconden minuten uren dagen maanden jaren
+
+    @Scheduled(cron = "0 0 7 * * FRI") // elke dag om 7:00:00 uur -- seconden minuten uren dagen maanden jaren
+    public void mailUS() throws Exception {
+        createMail(CountryCode.US);
+    }
+
+    @Scheduled(cron = "0 2 7 * * FRI") // elke dag om 7:00:00 uur -- seconden minuten uren dagen maanden jaren
+    public void mailGB() throws Exception {
+        createMail(CountryCode.GB);
+    }
+
+    @Scheduled(cron = "0 4 7 * * FRI") // elke dag om 7:00:00 uur -- seconden minuten uren dagen maanden jaren
+    public void mailNL() throws Exception {
+        createMail(CountryCode.NL);
+    }
+
+    public void createMail(CountryCode country) throws Exception {
+
+        log.info("The time is now {}", dateFormat.format(new Date()));
+
+        log.info("Country {}", country.getName());
+        List<MyAlbum> albums = SpotifyService.getListOfNewReleases_Sync(country);
+        log.info("Albums read.. {}", dateFormat.format(new Date()));
+
+        Mail mail = new Mail();
+        mail.setFrom(System.getenv("mailsender"));// replace with your desired email
+        mail.setMailTo(System.getenv("mailreceiver"));// replace with your desired email
+        mail.setSubject("New Releases " + country.getName() + " " + dateFormat.format(new Date()));
+        Map<String, Object> model = new HashMap<String, Object>();
+        model.put("albums", albums);
+        mail.setProps(model);
+        emailService.sendEmail(mail);
+        log.info("Mail sent.. {}", dateFormat.format(new Date()));
+
+    }
+
 }

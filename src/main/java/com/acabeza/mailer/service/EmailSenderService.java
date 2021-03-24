@@ -21,15 +21,15 @@ public class EmailSenderService {
     private JavaMailSender emailSender;
     @Autowired
     private SpringTemplateEngine templateEngine;
+
     public void sendEmail(Mail mail) throws MessagingException, IOException {
         MimeMessage message = emailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message,
-                MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+        MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
                 StandardCharsets.UTF_8.name());
-//        helper.addAttachment("template-cover.png", new ClassPathResource("javabydeveloper-email.PNG"));
+        // helper.addAttachment("template-cover.png", new ClassPathResource("javabydeveloper-email.PNG"));
         Context context = new Context();
         context.setVariables(mail.getProps());
-    
+
         String html = templateEngine.process("email-inlineimage", context);
         helper.setTo(mail.getMailTo());
         helper.setText(html, true);
