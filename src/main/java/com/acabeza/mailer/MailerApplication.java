@@ -18,6 +18,9 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
@@ -28,6 +31,11 @@ import org.springframework.stereotype.Component;
 @SpringBootApplication
 @EnableScheduling
 public class MailerApplication {
+
+    @Autowired
+    ScheduledTasks scheduledTasks;
+
+    private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
 
     public static void main(String[] args) {
         SpringApplication.run(MailerApplication.class, args);
@@ -43,16 +51,17 @@ public class MailerApplication {
      * 
      */
 
-    // @Component
-    // public class ApplicationRunnerBean implements ApplicationRunner {
-    // @Override
-    // public void run(ApplicationArguments args) throws Exception {
-    //
-    // System.out.println("Mailer started");
-    //
-    // System.out.println("Ended");
-    //
-    // }
-    // }
+    @Component
+    public class ApplicationRunnerBean implements ApplicationRunner {
+
+        @Override
+        public void run(ApplicationArguments args) throws Exception {
+
+            log.info("Mailer started");
+            scheduledTasks.mailNL();
+            log.info("Ended");
+
+        }
+    }
 
 }
