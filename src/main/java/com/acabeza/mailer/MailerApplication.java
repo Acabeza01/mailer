@@ -1,23 +1,9 @@
 package com.acabeza.mailer;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Properties;
-import java.util.Random;
-
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-
+import java.util.HashMap;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +14,19 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Component;
 
+import com.acabeza.mailer.model.Mail;
+import com.acabeza.mailer.service.EmailSenderService;
+
 @SpringBootApplication
 @EnableScheduling
 public class MailerApplication {
 
     @Autowired
-    ScheduledTasks scheduledTasks;
+    private EmailSenderService emailService;    
 
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
+
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM HH:mm:ss");
 
     public static void main(String[] args) {
         SpringApplication.run(MailerApplication.class, args);
@@ -58,7 +49,15 @@ public class MailerApplication {
         public void run(ApplicationArguments args) throws Exception {
 
             log.info("Mailer started");
-            scheduledTasks.mailNL();
+
+            Mail mail = new Mail();
+            mail.setFrom(System.getenv("mailsender"));// replace with your desired email
+            mail.setMailTo(System.getenv("mailreceiver"));// replace with your desired email
+            mail.setSubject("New Releases Started " + " " + dateFormat.format(new Date()));
+            Map<String, Object> model = new HashMap<String, Object>();
+            emailService.sendEmail(mail);
+            log.info("Mailer sent starter mail.. {}", dateFormat.format(new Date()));
+            
             log.info("Ended");
 
         }
