@@ -16,13 +16,17 @@ import org.springframework.stereotype.Component;
 
 import com.acabeza.mailer.model.Mail;
 import com.acabeza.mailer.service.EmailSenderService;
+import com.neovisionaries.i18n.CountryCode;
 
 @SpringBootApplication
 @EnableScheduling
 public class MailerApplication {
 
     @Autowired
-    private EmailSenderService emailService;    
+    private EmailSenderService emailService;  
+    
+    @Autowired
+    private ScheduledTasks scheduledtasks;
 
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
 
@@ -49,13 +53,14 @@ public class MailerApplication {
         public void run(ApplicationArguments args) throws Exception {
 
             log.info("Mailer started");
-
-            Mail mail = new Mail();
-            mail.setFrom(System.getenv("mailsender"));// replace with your desired email
-            mail.setMailTo(System.getenv("mailreceiver"));// replace with your desired email
-            mail.setSubject("New Releases Started " + " " + dateFormat.format(new Date()));
-            Map<String, Object> model = new HashMap<String, Object>();
-            emailService.sendEmail(mail);
+            
+            scheduledtasks.createMail(CountryCode.NL);
+//            Mail mail = new Mail();
+//            mail.setFrom(System.getenv("mailsender"));// replace with your desired email
+//            mail.setMailTo(System.getenv("mailreceiver"));// replace with your desired email
+//            mail.setSubject("New Releases Started " + " " + dateFormat.format(new Date()));
+//            Map<String, Object> model = new HashMap<String, Object>();
+//            emailService.sendEmail(mail);
             log.info("Mailer sent starter mail.. {}", dateFormat.format(new Date()));
             
             log.info("Ended");
