@@ -32,7 +32,7 @@ public class ScheduledTasks {
     // @Scheduled(cron = "0 0 7 * * *") //elke dag om 7:00:00 uur -- seconden minuten uren dagen maanden jaren
     // @Scheduled(cron = "* 31 * * * WED") //elke WOENSdag om :31:00 uur -- seconden minuten uren dagen maanden jaren
 
-    @Scheduled(cron = "0 0 7 * * FRI") // elke dag om 7:00:00 uur -- seconden minuten uren dagen maanden jaren
+    @Scheduled(cron = "0 32 10 * * *") // elke dag om 7:00:00 uur -- seconden minuten uren dagen maanden jaren
     public void mailUS() throws Exception {
         createMail(CountryCode.US);
     }
@@ -62,6 +62,7 @@ public class ScheduledTasks {
         Map<String, Object> model = new HashMap<String, Object>();
         model.put("albums", albums);
         mail.setProps(model);
+        Thread.sleep(1000);
         emailService.sendEmail(mail);
         log.info("Mail sent.. {}", dateFormat.format(new Date()));
 
