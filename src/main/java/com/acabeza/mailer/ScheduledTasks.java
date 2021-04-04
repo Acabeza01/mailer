@@ -24,25 +24,24 @@ public class ScheduledTasks {
     private EmailSenderService emailService;
 
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
-
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM HH:mm:ss");
 
     // @Scheduled(fixedDelay = 500000)
     // @Scheduled(cron = "3 * * * * *") //elke minuut op :03 seconden -- seconden minuten uren dagen maanden jaren
     // @Scheduled(cron = "0 0 7 * * *") //elke dag om 7:00:00 uur -- seconden minuten uren dagen maanden jaren
     // @Scheduled(cron = "* 31 * * * WED") //elke WOENSdag om :31:00 uur -- seconden minuten uren dagen maanden jaren
-
-    @Scheduled(cron = "0 0 7 * * *") // elke dag om 7:00:00 uur -- seconden minuten uren dagen maanden jaren
+    
+    @Scheduled(cron = "0 0 13 * * *") // elke dag om 7:00:00 uur -- seconden minuten uren dagen maanden jaren
     public void mailUS() throws Exception {
         createMail(CountryCode.US);
     }
 
-    @Scheduled(cron = "0 2 7 * * FRI") // elke dag om 7:00:00 uur -- seconden minuten uren dagen maanden jaren
+    @Scheduled(cron = "0 2 13 * * *") // elke dag om 7:00:00 uur -- seconden minuten uren dagen maanden jaren
     public void mailGB() throws Exception {
         createMail(CountryCode.GB);
     }
 
-    @Scheduled(cron = "0 4 7 * * FRI") // elke dag om 7:00:00 uur -- seconden minuten uren dagen maanden jaren
+    @Scheduled(cron = "0 4 13 * * *") // elke dag om 7:00:00 uur -- seconden minuten uren dagen maanden jaren
     public void mailNL() throws Exception {
         createMail(CountryCode.NL);
     }

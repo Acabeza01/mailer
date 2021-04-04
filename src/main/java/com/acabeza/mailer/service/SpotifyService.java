@@ -14,9 +14,12 @@ import com.acabeza.mailer.model.Track;
 import com.neovisionaries.i18n.CountryCode;
 
 import org.apache.hc.core5.http.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
@@ -26,9 +29,9 @@ import java.util.List;
 @Service
 public class SpotifyService {
 
-    private static final String accessToken = ClientCredentialsService.getAccessToken_Sync();
+	private static final Logger log = LoggerFactory.getLogger(SpotifyService.class);	 
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM HH:mm:ss");
 
-    private static final SpotifyApi spotifyApi = new SpotifyApi.Builder().setAccessToken(accessToken).build();
 
     // private static GetListOfNewReleasesRequest getListOfNewReleasesRequest = spotifyApi.getListOfNewReleases()
     //// .country(CountryCode.NL)
@@ -38,6 +41,12 @@ public class SpotifyService {
 
     public static List<MyAlbum> getListOfNewReleases_Sync(CountryCode country) {
         try {
+        	
+            
+            String accessToken = ClientCredentialsService.getAccessToken_Sync();
+
+            SpotifyApi spotifyApi = new SpotifyApi.Builder().setAccessToken(accessToken).build();        	
+        	
             List<MyAlbum> albums = new ArrayList<MyAlbum>();
 
             int meer = 0;
@@ -134,7 +143,7 @@ public class SpotifyService {
             return albums;
 
         } catch (IOException | SpotifyWebApiException | ParseException e) {
-            System.out.println("Error: " + e.getMessage());
+            log.info("Error: " + e.getMessage());
 
             return null;
         }
