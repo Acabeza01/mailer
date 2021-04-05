@@ -34,7 +34,7 @@ public class ScheduledTasks {
 //    @Scheduled(cron = "0 0 ${uurStart} * * *") // elke application.properteis uurStart = 7
     
     
-    @Scheduled(cron = "0 0 ${mailerstart} * * *") // elke dag om 7:00:00 uur -- seconden minuten uren dagen maanden jaren
+    @Scheduled(cron = "0 0 5 * * FRI") // elke dag om 7:00:00 uur -- seconden minuten uren dagen maanden jaren
     public void mailUS() throws Exception {
         createMail(CountryCode.US);
         createMail(CountryCode.GB);        
