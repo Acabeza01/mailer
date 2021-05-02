@@ -29,9 +29,8 @@ import java.util.List;
 @Service
 public class SpotifyService {
 
-	private static final Logger log = LoggerFactory.getLogger(SpotifyService.class);	 
+    private static final Logger log = LoggerFactory.getLogger(SpotifyService.class);
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM HH:mm:ss");
-
 
     // private static GetListOfNewReleasesRequest getListOfNewReleasesRequest = spotifyApi.getListOfNewReleases()
     //// .country(CountryCode.NL)
@@ -41,12 +40,11 @@ public class SpotifyService {
 
     public static List<MyAlbum> getListOfNewReleases_Sync(CountryCode country) {
         try {
-        	
-            
+
             String accessToken = ClientCredentialsService.getAccessToken_Sync();
 
-            SpotifyApi spotifyApi = new SpotifyApi.Builder().setAccessToken(accessToken).build();        	
-        	
+            SpotifyApi spotifyApi = new SpotifyApi.Builder().setAccessToken(accessToken).build();
+
             List<MyAlbum> albums = new ArrayList<MyAlbum>();
 
             int meer = 0;

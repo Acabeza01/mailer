@@ -26,5 +26,5 @@ public class ThymeleafTemplateConfig {
         emailTemplateResolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
         return emailTemplateResolver;
     }
-    
+
 }

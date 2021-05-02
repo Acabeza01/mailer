@@ -23,8 +23,8 @@ import com.neovisionaries.i18n.CountryCode;
 public class MailerApplication {
 
     @Autowired
-    private EmailSenderService emailService;  
-    
+    private EmailSenderService emailService;
+
     @Autowired
     private ScheduledTasks scheduledtasks;
 
@@ -53,16 +53,16 @@ public class MailerApplication {
         public void run(ApplicationArguments args) throws Exception {
 
             log.info("Mailer started");
-            
-//            scheduledtasks.createMail(CountryCode.NL);
-            
-//            Mail mail = new Mail();
-//            mail.setFrom(System.getenv("mailsender"));// replace with your desired email
-//            mail.setMailTo(System.getenv("mailreceiver"));// replace with your desired email
-//            mail.setSubject("New Releases Started " + " " + dateFormat.format(new Date()));
-//            emailService.sendEmail(mail);
-//            log.info("Mailer sent starter mail.. {}", dateFormat.format(new Date()));
-            
+
+            // scheduledtasks.createMail(CountryCode.NL);
+
+            // Mail mail = new Mail();
+            // mail.setFrom(System.getenv("mailsender"));// replace with your desired email
+            // mail.setMailTo(System.getenv("mailreceiver"));// replace with your desired email
+            // mail.setSubject("New Releases Started " + " " + dateFormat.format(new Date()));
+            // emailService.sendEmail(mail);
+            // log.info("Mailer sent starter mail.. {}", dateFormat.format(new Date()));
+
             log.info("Ended");
 
         }
